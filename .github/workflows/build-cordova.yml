@@ -48,22 +48,14 @@ jobs:
               run: |
                   npm i -g npm@8.2.0
                   npm ci
-            - name: Create android-upload-key.keystore
-              run: |
-                  cd packages/cordova
-                  echo '${{ secrets.PL_ANDROID_UPLOAD_KEY_BASE64}}' > android-upload-key.keystore.txt
-                  base64 -d android-upload-key.keystore.txt > android-upload-key.keystore
-                  rm -f android-upload-key.keystore.txt
             - name: Build (Android)
               env:
                   PL_SERVER_URL: ${{ secrets.PL_SERVER_URL }}
-                  PL_ANDROID_STORE_PASSWORD: ${{ secrets.PL_ANDROID_STORE_PASSWORD }}
-                  PL_ANDROID_KEYSTORE_ALIAS: ${{ secrets.PL_ANDROID_KEYSTORE_ALIAS }}
-              run: npm run cordova:build:android:signed
+              run: npm run cordova:build:android
             - name: Archive Signed APK (Android)
               uses: actions/upload-artifact@v2
               with:
-                  name: padloc-android-${{ github.sha }}-signed.apk
+                  name: padloc-android-${{ github.sha }}-unsigned.apk
                   path: packages/cordova/platforms/android/app/build/outputs/apk/release/app-release.apk
                   if-no-files-found: error
             - name: Delete android-upload-key.keystore

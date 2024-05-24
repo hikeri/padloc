@@ -3,9 +3,6 @@ name: Build Cordova
 on:
     workflow_dispatch:
         inputs:
-            environment:
-                type: environment
-                default: "Local"
             targets:
                 type: choice
                 description: "Targets to build"
